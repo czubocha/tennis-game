@@ -5,14 +5,39 @@ package pl.za.czubocha;
  */
 
 public class TennisGame {
-
-    private Player firstPlayer, secondPlayer;
+    private final Player firstPlayer;
+    private final Player secondPlayer;
     private String winner;
 
     public TennisGame() {
         firstPlayer = new Player("Server");
         secondPlayer = new Player("Receiver");
         winner = "";
+    }
+
+    public String getScore() {
+        if (isGameOver())
+            return sayWhoIsWinner();
+        return getFirstPlayer().getScore() + ":" + getSecondPlayer().getScore();
+    }
+
+    public int pointWon(int i) {
+        if (i != 1 && i != 2)
+            return -1;
+        else if (isGameOver())
+            return 0;
+        else if (i == 1 && isGameOn(getFirstPlayer(), getSecondPlayer())) {
+            pointWon(getFirstPlayer(), getSecondPlayer());
+            return 1;
+        } else if (i == 2 && isGameOn(getSecondPlayer(), getFirstPlayer())) {
+            pointWon(getSecondPlayer(), getFirstPlayer());
+            return 2;
+        } else
+            return -2;
+    }
+
+    public boolean isGameOver() {
+        return !getWinner().equals("");
     }
 
     private Player getFirstPlayer() {
@@ -27,47 +52,22 @@ public class TennisGame {
         return winner;
     }
 
-    public void setWinner(String winner) {
+    private void setWinner(String winner) {
         this.winner = winner;
     }
 
-    private boolean isWinner(Player playerGotPoint, Player otherPlayer) {
+    private boolean isGameOn(Player playerGotPoint, Player otherPlayer) {
         String firstScore = playerGotPoint.getScore();
         String secondScore = otherPlayer.getScore();
         if (firstScore.equals("A") || firstScore.equals("40") && !secondScore.equals("40") && !secondScore.equals("A")) {
             setWinner(playerGotPoint.getName());
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     private String sayWhoIsWinner() {
         return "And the winner is... " + getWinner() + "!";
-    }
-
-    private boolean isGameOver() {
-        return !getWinner().equals("");
-    }
-
-    public String getScore() {
-        if (isGameOver())
-            return sayWhoIsWinner();
-        return getFirstPlayer().getScore() + ":" + getSecondPlayer().getScore();
-    }
-
-    public int pointWon(int i) {
-        if (i != 1 && i != 2)
-            return -1;
-        else if (isGameOver())
-            return 0;
-        else if (i == 1 && !isWinner(getFirstPlayer(), getSecondPlayer())) {
-            pointWon(getFirstPlayer(), getSecondPlayer());
-            return 1;
-        } else if (i == 2 && !isWinner(getSecondPlayer(), getFirstPlayer())) {
-            pointWon(getSecondPlayer(), getFirstPlayer());
-            return 2;
-        } else
-            return -2;
     }
 
 
@@ -91,8 +91,8 @@ public class TennisGame {
     }
 
     private class Player {
+        private final String name;
         private String score;
-        private String name;
 
         private Player() {
             score = "0";

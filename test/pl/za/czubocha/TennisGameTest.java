@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
  */
 public class TennisGameTest {
 
-    TennisGame tennisGame = new TennisGame();
+    private final TennisGame tennisGame = new TennisGame();
 
     @Test
     public void whenGameIsCreatedThenScoreIs0() {
@@ -88,7 +88,7 @@ public class TennisGameTest {
     }
 
     @Test
-    public void whenScoreIs4040AndPlayer1WinsPointThenPlayer1WinsGame() {
+    public void whenScoreIs4040AndPlayer1WinsPointThenA40() {
         tennisGame.pointWon(1);
         tennisGame.pointWon(1);
         tennisGame.pointWon(1);
@@ -124,5 +124,4 @@ public class TennisGameTest {
         tennisGame.pointWon(2);
         Assertions.assertEquals("40:40", tennisGame.getScore());
     }
-
 }
